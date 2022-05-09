@@ -9,7 +9,7 @@ WIDTH = HEIGHT = 640
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('UCM')
 
-FPS = 30
+FPS = 60
 timer = pygame.time.Clock()
 
 running = True
@@ -18,7 +18,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (240, 20, 20)
 BLUE = (20, 20, 240)
-RADIUS = 180
+RADIUS = 200
 CENTER = (640 / 2, 640 / 2)
 
 
@@ -28,24 +28,23 @@ class Ball:
         self.initial_pos = (640 / 2, 640 / 2 - RADIUS)
         self.pos_x = self.initial_pos[0]
         self.pos_y = self.initial_pos[1]
-        self.radius = 20
-        self.particle = pygame.draw.circle(WINDOW, self.color, self.initial_pos, self.radius)
-        self.angular_speed = 0.05
-        self.angle = 0
-        self.velocity = 0
         self.main_radius = RADIUS
+        self.radius = self.main_radius / 10
+        self.particle = pygame.draw.circle(WINDOW, self.color, self.initial_pos, self.radius)
+        self.angle = 0
+        self.velocity = 5
+        self.angular_speed = self.velocity / self.main_radius
         self.velocity_x = 0
         self.velocity_y = 0
 
     def tick(self):
-        self.velocity = self.angular_speed * self.main_radius
+        self.angle += self.angular_speed
         self.velocity_x = math.cos(self.angle) * self.velocity
         self.velocity_y = math.sin(self.angle) * self.velocity
+        self.particle = pygame.draw.circle(WINDOW, self.color, (self.pos_x, self.pos_y), self.radius)
         self.pos_x += self.velocity_x
         self.pos_y += self.velocity_y
         print(self.distance_to_center())
-        self.particle = pygame.draw.circle(WINDOW, self.color, (self.pos_x, self.pos_y), self.radius)
-        self.angle += self.angular_speed
 
     def distance_to_center(self):
         main_center = CENTER
